@@ -2,38 +2,53 @@
 
 set -e
 
-echo "Navigating to the foundryup-zksync script..."
-cd foundryup-zksync
+# URLs to the raw files on GitHub
+INSTALL_SCRIPT_URL="https://github.com/dutterbutter/foundry-zksync/raw/main/foundryup-zksync/install"
+FOUNDRYUP_ZKSYNC_URL="https://github.com/dutterbutter/foundry-zksync/raw/main/foundryup-zksync/foundryup-zksync"
 
-echo "Making install script executable..."
+# Download the install script
+echo "Downloading the install script..."
+curl -L "$INSTALL_SCRIPT_URL" -o install
+
+# Make the install script executable
+echo "Making the install script executable..."
 chmod +x ./install
 
+# Run the installation script and capture the output in a log file
 echo "Running the installation script..."
-./install | tee install.log  # Capture the output to both stdout and a log file
+./install | tee install.log
 
 # Extract the exact path from the install.log
-# Use sed to precisely capture the path after 'source' and before the next apostrophe
 SHELL_CONFIG_FILE=$(sed -n "s/.*Run 'source \(.*\)'.*/\1/p" install.log)
 
+# Source the shell config file if available
 if [ -n "$SHELL_CONFIG_FILE" ]; then
     if [ -n "${CI}" ]; then
-        # Add manually to $PATH in CI mode as GHA does not work with `.`
         FOUNDRY_BIN_DIR="${XDG_CONFIG_HOME:-$HOME}/.foundry/bin"
-        echo "adding '${FOUNDRY_BIN_DIR}' to PATH and GITHUB_PATH"
+        echo "Adding '${FOUNDRY_BIN_DIR}' to PATH and GITHUB_PATH"
         export PATH="$PATH:$FOUNDRY_BIN_DIR"
         echo "${FOUNDRY_BIN_DIR}" >> $GITHUB_PATH
     else
         echo "Sourcing the shell configuration file: '$SHELL_CONFIG_FILE'"
-        # Use dot (.) to source the file, which is more universally compatible
         . "$SHELL_CONFIG_FILE"
     fi
 else
     echo "No shell configuration file detected. Please source your shell manually or start a new terminal session."
 fi
 
+# Download the foundryup-zksync script
+echo "Downloading foundryup-zksync..."
+curl -L "$FOUNDRYUP_ZKSYNC_URL" -o foundryup-zksync
+
+# Make foundryup-zksync script executable
+echo "Making foundryup-zksync executable..."
+chmod +x ./foundryup-zksync
+
+# Run foundryup-zksync setup
 echo "Running foundryup-zksync setup..."
 ./foundryup-zksync
 
+# Verify installation
 echo "Verifying installation..."
 if forge --version | grep -q "0.0.2"; then
     echo "Forge version 0.0.2 is successfully installed."
