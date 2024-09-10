@@ -10,10 +10,6 @@ FOUNDRYUP_ZKSYNC_URL="https://raw.githubusercontent.com/matter-labs/foundry-zksy
 echo "Downloading the install script..."
 curl -L "$INSTALL_SCRIPT_URL" -o install
 
-# Download the install script
-echo "Downloading the install script..."
-curl -L "$INSTALL_SCRIPT_URL" -o install
-
 # Make the install script executable
 echo "Making the install script executable..."
 chmod +x ./install
