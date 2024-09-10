@@ -38,11 +38,11 @@ fi
 
 # Download the foundryup-zksync script
 echo "Downloading foundryup-zksync..."
-curl -L "$FOUNDRYUP_ZKSYNC_URL" -o foundryup-zksync
+curl -L "$FOUNDRYUP_ZKSYNC_URL" -o foundryup-zksync.sh
 
 # Make foundryup-zksync script executable
 echo "Making foundryup-zksync executable..."
-chmod +x ./foundryup-zksync
+chmod +x ./foundryup-zksync.sh
 
 # Run foundryup-zksync setup
 echo "Running foundryup-zksync setup..."
