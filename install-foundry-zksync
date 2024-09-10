@@ -3,8 +3,8 @@
 set -e
 
 # URLs to the raw files on GitHub
-INSTALL_SCRIPT_URL="https://raw.githubusercontent.com/matter-labs/foundry-zksync/main/foundryup-zksync/install"
-FOUNDRYUP_ZKSYNC_URL="https://raw.githubusercontent.com/matter-labs/foundry-zksync/main/foundryup-zksync/foundryup-zksync"
+INSTALL_SCRIPT_URL="https://raw.githubusercontent.com/dutterbutter/foundry-zksync/dev/foundryup-zksync/install"
+FOUNDRYUP_ZKSYNC_URL="https://raw.githubusercontent.com/dutterbutter/foundry-zksync/dev/foundryup-zksync/foundryup-zksync"
 
 # Download the install script
 echo "Downloading the install script..."
@@ -38,15 +38,15 @@ fi
 
 # Download the foundryup-zksync script
 echo "Downloading foundryup-zksync..."
-curl -L "$FOUNDRYUP_ZKSYNC_URL" -o foundryup-zksync.sh
+curl -L "$FOUNDRYUP_ZKSYNC_URL" -o foundryup-zksync
 
 # Make foundryup-zksync script executable
 echo "Making foundryup-zksync executable..."
-chmod +x ./foundryup-zksync.sh
+chmod +x ./foundryup-zksync
 
 # Run foundryup-zksync setup
-echo "Running foundryup-zksync.sh setup..."
-./foundryup-zksync.sh
+echo "Running foundryup-zksync setup..."
+./foundryup-zksync
 
 # Verify installation
 echo "Verifying installation..."
