@@ -45,8 +45,8 @@ echo "Making foundryup-zksync executable..."
 chmod +x ./foundryup-zksync.sh
 
 # Run foundryup-zksync setup
-echo "Running foundryup-zksync setup..."
-./foundryup-zksync
+echo "Running foundryup-zksync.sh setup..."
+./foundryup-zksync.sh
 
 # Verify installation
 echo "Verifying installation..."
