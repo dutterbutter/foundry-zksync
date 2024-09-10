@@ -41,7 +41,7 @@ echo "Downloading foundryup-zksync..."
 curl -L "$FOUNDRYUP_ZKSYNC_URL" -o foundryup-zksync
 
 # Make foundryup-zksync script executable
-echo "Making foundryup-zksync executable..."
+echo "Making foundryup-zksync executable............"
 chmod +x ./foundryup-zksync
 
 # Run foundryup-zksync setup
