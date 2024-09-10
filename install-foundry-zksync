@@ -48,6 +48,13 @@ chmod +x ./foundryup-zksync
 echo "Running foundryup-zksync setup..."
 ./foundryup-zksync
 
+# Cleanup: remove install and install.log
+echo "Cleaning up installation artifacts..."
+rm -f ./install ./install.log
+echo "Cleanup completed."
+
+echo "Installation completed successfully!"
+
 # Verify installation
 echo "Verifying installation..."
 if forge --version | grep -q "0.0.2"; then
@@ -56,10 +63,3 @@ else
     echo "Installation verification failed. Forge is not properly installed."
     exit 1
 fi
-
-# Cleanup: remove install and install.log
-echo "Cleaning up installation artifacts..."
-rm -f ./install ./install.log
-echo "Cleanup completed."
-
-echo "Installation completed successfully!"
