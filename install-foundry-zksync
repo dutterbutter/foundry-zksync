@@ -56,3 +56,10 @@ else
     echo "Installation verification failed. Forge is not properly installed."
     exit 1
 fi
+
+# Cleanup: remove install and install.log
+echo "Cleaning up installation artifacts..."
+rm -f ./install ./install.log
+echo "Cleanup completed."
+
+echo "Installation completed successfully!"
