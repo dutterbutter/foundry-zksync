@@ -38,7 +38,7 @@ jobs:
         id: cumulative
         run: |
           CURRENT_TOTAL=$(git show cumulative-loc:loc_total.txt 2>/dev/null || echo "0")
-          NEW_TOTAL=$((CURRENT_TOTAL + ${env.loc_diff}))
+          NEW_TOTAL=$((CURRENT_TOTAL + $loc_diff))  # Refer to $loc_diff directly
           echo "new_total=$NEW_TOTAL" >> $GITHUB_ENV
 
           # Store new total for the cumulative branch
