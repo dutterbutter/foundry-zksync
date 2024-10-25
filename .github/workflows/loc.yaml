@@ -2,7 +2,10 @@ name: PR Code Difference Checker
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, synchronize]
+
+permissions:
+  contents: write # Allows pushing changes to the repository
 
 jobs:
   calculate_diff:
@@ -25,7 +28,7 @@ jobs:
         run: |
           # Calculate the diff in LOC and target specific files
           LOC_DIFF=$(git diff da77402 --stat | grep -E '(\.rs|Cargo\.toml)' | awk '{sum += $1} END {print sum}')
-          echo "loc_diff=$LOC_DIFF" >> $GITHUB_ENV
+          echo "loc_diff=${LOC_DIFF:-0}" >> $GITHUB_ENV  # Default to 0 if LOC_DIFF is empty
 
       - name: Fetch cumulative LOC branch
         run: |
@@ -35,7 +38,7 @@ jobs:
         id: cumulative
         run: |
           CURRENT_TOTAL=$(git show cumulative-loc:loc_total.txt 2>/dev/null || echo "0")
-          NEW_TOTAL=$((CURRENT_TOTAL + ${{ env.loc_diff }}))
+          NEW_TOTAL=$((CURRENT_TOTAL + ${env.loc_diff}))
           echo "new_total=$NEW_TOTAL" >> $GITHUB_ENV
 
           # Store new total for the cumulative branch
@@ -45,7 +48,7 @@ jobs:
           git checkout -B cumulative-loc
           git add loc_total.txt
           git commit -m "Update cumulative LOC total to $NEW_TOTAL"
-          git push origin cumulative-loc
+          git push origin cumulative-loc || echo "Push failed. Make sure the workflow has permissions."
 
       - name: Count dependencies added
         id: dependency_count
