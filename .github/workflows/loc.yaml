@@ -1,0 +1,79 @@
+name: PR Code Difference Checker
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  calculate_diff:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch all history for accurate comparisons
+
+      - name: Setup Git for upstream comparison at specific commit
+        run: |
+          git remote add upstream https://github.com/foundry-rs/foundry.git
+          git fetch upstream
+          git checkout da77402 # Set specific upstream commit for comparison
+
+      - name: Calculate LOC difference from specified commit
+        id: loc_diff
+        run: |
+          # Calculate the diff in LOC and target specific files
+          LOC_DIFF=$(git diff da77402 --stat | grep -E '(\.rs|Cargo\.toml)' | awk '{sum += $1} END {print sum}')
+          echo "loc_diff=$LOC_DIFF" >> $GITHUB_ENV
+
+      - name: Fetch cumulative LOC branch
+        run: |
+          git fetch origin cumulative-loc:cumulative-loc || echo "No cumulative branch yet"
+
+      - name: Calculate and update cumulative LOC
+        id: cumulative
+        run: |
+          CURRENT_TOTAL=$(git show cumulative-loc:loc_total.txt 2>/dev/null || echo "0")
+          NEW_TOTAL=$((CURRENT_TOTAL + ${{ env.loc_diff }}))
+          echo "new_total=$NEW_TOTAL" >> $GITHUB_ENV
+
+          # Store new total for the cumulative branch
+          echo $NEW_TOTAL > loc_total.txt
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git checkout -B cumulative-loc
+          git add loc_total.txt
+          git commit -m "Update cumulative LOC total to $NEW_TOTAL"
+          git push origin cumulative-loc
+
+      - name: Count dependencies added
+        id: dependency_count
+        run: |
+          # Count dependencies added in specific files like Cargo.toml
+          DEP_COUNT=$(git diff da77402 Cargo.toml | grep '+' | wc -l)
+          echo "dep_count=$DEP_COUNT" >> $GITHUB_ENV
+
+      - name: Post Comment on PR
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const locDiff = `${{ env.loc_diff }}`;
+            const totalLOC = `${{ env.new_total }}`;
+            const depCount = `${{ env.dep_count }}`;
+            const comment = `
+            ### PR Summary
+            - **Lines of Code (LOC) added this PR**: +${locDiff}
+            - **New Cumulative LOC Difference**: +${totalLOC}
+            - **Dependencies added**: +${depCount}
+
+            > _Total LOC difference is updated with each PR._
+            `;
+
+            // Post the comment to the PR
+            github.rest.issues.createComment({
+              issue_number: context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
