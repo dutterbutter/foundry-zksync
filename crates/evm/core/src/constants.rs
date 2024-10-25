@@ -39,7 +39,7 @@ pub const DEFAULT_CREATE2_DEPLOYER_DEPLOYER: Address =
 pub const DEFAULT_CREATE2_DEPLOYER: Address = address!("4e59b44847b379578588920ca78fbf26c0b4956c");
 /// TEST
 pub const ZK_DEFAULT_CREATE2_DEPLOYER: Address =
-    address!("4e59b44847b379578588920ca78fbf26c0b4956x");
+    address!("4e59b44847b379578588920ca78fbdf26c0b4956x");
 
 /// The initcode of the default CREATE2 deployer.
 pub const DEFAULT_CREATE2_DEPLOYER_CODE: &[u8] = &hex!("604580600e600039806000f350fe7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe03601600081602082378035828234f58015156039578182fd5b8082525050506014600cf3");
