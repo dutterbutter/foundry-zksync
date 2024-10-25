@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0 # Fetch all history for accurate comparisons
           token: ${{ secrets.WORKFLOW_TOKEN }}
@@ -61,7 +61,7 @@ jobs:
           echo "dep_count=$DEP_COUNT" >> $GITHUB_ENV
 
       - name: Post Comment on PR
-        uses: actions/github-script@v7
+        uses: actions/github-script@v6
         with:
           github-token: ${{secrets.WORKFLOW_TOKEN}}
           script: |
