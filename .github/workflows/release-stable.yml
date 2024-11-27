@@ -83,7 +83,7 @@ jobs:
           else
             echo "Invalid release type." >&2
             exit 1
-
+          fi
       - name: Create stable tag and update latest
         if: ${{ steps.release_type.outputs.release_type == 'stable' || steps.release_type.outputs.release_type == 'tag' || steps.release_type.outputs.release_type == 'manual' }}
         run: |
