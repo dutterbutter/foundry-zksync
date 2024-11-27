@@ -14,6 +14,19 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+  validate_input:
+    name: Validate Input
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    steps:
+      - name: Check tag version input
+        run: |
+          TAG_VERSION="${{ github.event.inputs.tag_version }}"
+          if [[ -n "$TAG_VERSION" && ! "$TAG_VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: Invalid tag version format. Expected format: v1.2.3"
+            exit 1
+          fi
+          echo "Input validation passed."
   prepare:
     name: Prepare Stable Release
     runs-on: ubuntu-latest
@@ -32,8 +45,12 @@ jobs:
         run: |
           if [[ "${{ github.event_name }}" == "schedule" ]]; then
             schedule_cron="${{ github.event.schedule }}"
+<<<<<<< Updated upstream
             # Ensure the correct cron for stable releases
             if [[ "$schedule_cron" == "20 17 * * WED" ]]; then
+=======
+            if [[ "$schedule_cron" == "0 0 * * SUN" ]]; then
+>>>>>>> Stashed changes
               echo "release_type=stable" >> $GITHUB_OUTPUT
             else
               echo "release_type=unknown" >> $GITHUB_OUTPUT
@@ -46,22 +63,21 @@ jobs:
           else
             echo "release_type=unknown" >> $GITHUB_OUTPUT
             exit 1
-          fi
 
       - name: Compute release name and tag
         id: release_info
         run: |
           RELEASE_TYPE="${{ steps.release_type.outputs.release_type }}"
-          if [[ "$RELEASE_TYPE" == "manual" || "$RELEASE_TYPE" == "tag" ]]; then
+          TAG_VERSION="${{ github.event.inputs.tag_version }}"
+          if [[ "$RELEASE_TYPE" == "manual" && -n "$TAG_VERSION" ]]; then
+            echo "tag_name=$TAG_VERSION" >> $GITHUB_OUTPUT
+            echo "release_name=foundry-zksync@$TAG_VERSION" >> $GITHUB_OUTPUT
+          elif [[ "$RELEASE_TYPE" == "tag" ]]; then
             echo "tag_name=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
             echo "release_name=foundry-zksync@${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
           elif [[ "$RELEASE_TYPE" == "stable" ]]; then
-            # Fetch the latest stable tag
             latest_tag=$(git tag --list 'v*.*.*' | sort -V | tail -n1)
-            echo "Latest stable tag: $latest_tag"
-            # Extract version numbers
             IFS='.' read -r major minor patch <<< "${latest_tag#v}"
-            # Increment patch version
             patch=$((patch + 1))
             new_tag="v$major.$minor.$patch"
             echo "tag_name=$new_tag" >> $GITHUB_OUTPUT
@@ -78,7 +94,6 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag ${{ steps.release_info.outputs.tag_name }}
           git push origin ${{ steps.release_info.outputs.tag_name }}
-          # Update the 'latest' tag to point to the new stable release
           git tag -f latest ${{ steps.release_info.outputs.tag_name }}
           git push origin latest -f
 
