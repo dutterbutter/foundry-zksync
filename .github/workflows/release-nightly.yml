@@ -2,7 +2,7 @@ name: release-nightly
 
 on:
   schedule:
-    - cron: "0 1 * * *" # Daily at 1 AM UTC
+    - cron: "0 1 * * *" # Daily at 1 AM UTC to not overlap with other scheduled workflows
   workflow_dispatch:
 
 env:
