@@ -61,7 +61,7 @@ jobs:
           else
             echo "release_type=unknown" >> $GITHUB_OUTPUT
             exit 1
-
+          fi
       - name: Compute release name and tag
         id: release_info
         run: |
