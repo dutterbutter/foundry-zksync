@@ -111,7 +111,7 @@ jobs:
         id: build_changelog
         uses: mikepenz/release-changelog-builder-action@v5
         with:
-          mode: "COMMIT"
+          fetchViaCommits: true
           configuration: "./.github/changelog.json"
           fromTag: ${{ steps.previous_tag.outputs.from_tag }}
           toTag: ${{ steps.release_info.outputs.tag_name }}
