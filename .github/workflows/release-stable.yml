@@ -93,7 +93,7 @@ jobs:
           git push origin ${{ steps.release_info.outputs.tag_name }}
           git tag -f latest ${{ steps.release_info.outputs.tag_name }}
           git push origin latest -f
-
+      # Account for the case where the latest tag is not a valid semantic version tag
       - name: Determine Previous Tag
         id: previous_tag
         run: |
