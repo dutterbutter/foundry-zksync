@@ -88,7 +88,7 @@
       "target": "$1"
     }
   },
-  "base_branches": ["main"],
+  "base_branches": ["dev"],
   "trim_values": true,
   "contributors": true
 }
