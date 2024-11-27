@@ -94,12 +94,25 @@ jobs:
           git tag -f latest ${{ steps.release_info.outputs.tag_name }}
           git push origin latest -f
 
+      - name: Determine Previous Tag
+        id: previous_tag
+        run: |
+          # Fetch all tags
+          git fetch --tags
+          # Filter only semantic version tags and sort them
+          previous_tag=$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*' | sort -V | tail -n2 | head -n1)
+          if [[ -z "$previous_tag" ]]; then
+            echo "No previous valid semantic version tag found. Exiting."
+            exit 1
+          fi
+          echo "from_tag=$previous_tag" >> $GITHUB_OUTPUT
+
       - name: Build changelog
         id: build_changelog
         uses: mikepenz/release-changelog-builder-action@v5
         with:
           configuration: "./.github/changelog.json"
-          fromTag: "v*.*.2"
+          fromTag: ${{ steps.previous_tag.outputs.from_tag }}
           toTag: ${{ steps.release_info.outputs.tag_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
