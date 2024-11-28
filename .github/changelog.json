@@ -2,29 +2,54 @@
   "categories": [
     {
       "title": "### 🐛 Bug Fixes:",
-      "pattern": "^fix:\\s(.+)",
-      "pr_template": "- fix: {{title}} ([#{{number}}]({{url}}))"
+      "rules": [
+        {
+          "pattern": "^fix:\\s(.+)",
+          "on_property": "commit.message"
+        }
+      ],
+      "commit_template": "- fix: {{title}} ([#{{number}}]({{url}}))"
     },
     {
       "title": "### ✨ New Features:",
-      "pattern": "^feat:\\s(.+)",
-      "pr_template": "- feat: {{title}} ([#{{number}}]({{url}}))"
+      "rules": [
+        {
+          "pattern": "^feat:\\s(.+)",
+          "on_property": "commit.message"
+        }
+      ],
+      "commit_template": "- feat: {{title}} ([#{{number}}]({{url}}))"
     },
     {
       "title": "### ⚠️ Breaking Changes:",
-      "pattern": "^BREAKING CHANGE:\\s(.+)",
-      "pr_template": "- BREAKING CHANGE: {{title}} ([#{{number}}]({{url}}))",
+      "rules": [
+        {
+          "pattern": "^BREAKING CHANGE:\\s(.+)",
+          "on_property": "commit.message"
+        }
+      ],
+      "commit_template": "- BREAKING CHANGE: {{title}} ([#{{number}}]({{url}}))",
       "empty_content": "- N/A"
     },
     {
       "title": "### 🔧 Chores:",
-      "pattern": "^chore:\\s(.+)",
-      "pr_template": "- chore: {{title}} ([#{{number}}]({{url}}))"
+      "rules": [
+        {
+          "pattern": "^chore:\\s(.+)",
+          "on_property": "commit.message"
+        }
+      ],
+      "commit_template": "- chore: {{title}} ([#{{number}}]({{url}}))"
     },
     {
       "title": "### 📝 Documentation:",
-      "pattern": "^docs:\\s(.+)",
-      "pr_template": "- docs: {{title}} ([#{{number}}]({{url}}))"
+      "rules": [
+        {
+          "pattern": "^docs:\\s(.+)",
+          "on_property": "commit.message"
+        }
+      ],
+      "commit_template": "- docs: {{title}} ([#{{number}}]({{url}}))"
     }
   ],
   "ignore_patterns": [
@@ -41,8 +66,7 @@
     "order": "DESC",
     "on_property": "mergedAt"
   },
-  "template": "# 📋 Summary\n\n{{CHANGELOG}}\n\n## 📜 All Changes\n\n{{ALL_CHANGES}}\n\n## ⭐ Contributors\n\n{{CONTRIBUTORS}}",
-  "pr_template": "- {{prefix}}: {{title}} ([#{{number}}]({{url}}))",
+  "template": "# 📋 Summary\n\n#{{CHANGELOG}}\n\n## 📜 All Changes\n\n#{{ALL_CHANGES}}\n\n## ⭐ Contributors\n\n#{{CONTRIBUTORS}}",
   "all_changes_template": "- {{prefix}}: {{title}} ([#{{number}}]({{url}}))",
   "contributors_template": "- {{author_name}} ({{author_email}})",
   "empty_template": "- No changes in this release.",
