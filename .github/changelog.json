@@ -2,7 +2,6 @@
   "categories": [
     {
       "title": "### 🐛 Bug Fixes:",
-<<<<<<< Updated upstream
       "pattern": "^fix:\\s(.+)",
       "pr_template": "- fix: {{title}} ([#{{number}}]({{url}}))"
     },
@@ -15,40 +14,10 @@
       "title": "### ⚠️ Breaking Changes:",
       "pattern": "^BREAKING CHANGE:\\s(.+)",
       "pr_template": "- BREAKING CHANGE: {{title}} ([#{{number}}]({{url}}))",
-=======
-      "rules": [
-        {
-          "pattern": "^fix:\\s(.+)",
-          "on_property": "message"
-        }
-      ],
-      "commit_template": "- fix: {{title}} ([#{{number}}]({{url}}))"
-    },
-    {
-      "title": "### ✨ New Features:",
-      "rules": [
-        {
-          "pattern": "^feat:\\s(.+)",
-          "on_property": "message"
-        }
-      ],
-      "commit_template": "- feat: {{title}} ([#{{number}}]({{url}}))"
-    },
-    {
-      "title": "### ⚠️ Breaking Changes:",
-      "rules": [
-        {
-          "pattern": "^BREAKING CHANGE:\\s(.+)",
-          "on_property": "message"
-        }
-      ],
-      "commit_template": "- BREAKING CHANGE: {{title}} ([#{{number}}]({{url}}))",
->>>>>>> Stashed changes
       "empty_content": "- N/A"
     },
     {
       "title": "### 🔧 Chores:",
-<<<<<<< Updated upstream
       "pattern": "^chore:\\s(.+)",
       "pr_template": "- chore: {{title}} ([#{{number}}]({{url}}))"
     },
@@ -56,25 +25,6 @@
       "title": "### 📝 Documentation:",
       "pattern": "^docs:\\s(.+)",
       "pr_template": "- docs: {{title}} ([#{{number}}]({{url}}))"
-=======
-      "rules": [
-        {
-          "pattern": "^chore:\\s(.+)",
-          "on_property": "message"
-        }
-      ],
-      "commit_template": "- chore: {{title}} ([#{{number}}]({{url}}))"
-    },
-    {
-      "title": "### 📝 Documentation:",
-      "rules": [
-        {
-          "pattern": "^docs:\\s(.+)",
-          "on_property": "message"
-        }
-      ],
-      "commit_template": "- docs: {{title}} ([#{{number}}]({{url}}))"
->>>>>>> Stashed changes
     }
   ],
   "ignore_patterns": [
