@@ -134,7 +134,7 @@ jobs:
               ],
               "label_extractor": [
                 {
-                  "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test|breaking){1}(\([\w\-\.]+\))?(!)?: ([\w ])+([\s\S]*)",
+                  "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test|breaking){1}(\\([\\w\\-\\.]+\\))?(!)?:",
                   "target": "$1"
                 }
               ],
@@ -143,7 +143,9 @@ jobs:
                 "on_property": "mergedAt"
               },
               "pr_template": "- {{TITLE}} (#{{NUMBER}})"
-            },
+            }
+          fetchReviewers: true
+          fetchReleaseInformation: true
           fromTag: ${{ steps.previous_tag.outputs.from_tag }}
           toTag: ${{ steps.release_info.outputs.tag_name }}
         env:
