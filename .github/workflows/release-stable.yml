@@ -113,7 +113,7 @@ jobs:
         with:
           configurationJson: |
             {
-              "template": "## 📋 Summary\n\n{{CHANGELOG}}\n\n## 🌟 Contributors\n\n{{CONTRIBUTORS}}",
+              "template": "## 📋 Summary\n\n{{CATEGORIZED}}\n\n## 📜 All Changes\n\n{{ALL_CHANGES}}\n\n## 🌟 Contributors\n\n{{CONTRIBUTORS}}",
               "categories": [
                 {
                   "title": "### 🐛 Bug Fixes:",
@@ -125,7 +125,7 @@ jobs:
                 },
                 {
                   "title": "### ⚠️ Breaking Changes:",
-                  "labels": ["breaking change"]
+                  "labels": ["breaking change", "breaking"]
                 },
                 {
                   "title": "### 🛠️ Other Changes:",
@@ -134,10 +134,15 @@ jobs:
               ],
               "label_extractor": [
                 {
-                  "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([\w\-\.]+\))?(!)?: ([\w ])+([\s\S]*)",
+                  "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test|breaking){1}(\([\w\-\.]+\))?(!)?: ([\w ])+([\s\S]*)",
                   "target": "$1"
                 }
-              ]
+              ],
+              "sort": {
+                "order": "DESC",
+                "on_property": "mergedAt"
+              },
+              "pr_template": "- {{TITLE}} (#{{NUMBER}})"
             },
           fromTag: ${{ steps.previous_tag.outputs.from_tag }}
           toTag: ${{ steps.release_info.outputs.tag_name }}
@@ -271,22 +276,10 @@ jobs:
           echo "foundry_man=foundry_man_${VERSION_NAME}.tar.gz" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           name: ${{ needs.prepare.outputs.release_name }}
           tag_name: ${{ needs.prepare.outputs.tag_name }}
-          prerelease: false
-          body: ${{ needs.prepare.outputs.changelog }}
-          files: |
-            ${{ steps.artifacts.outputs.file_name }}
-            ${{ steps.man.outputs.foundry_man }}
-
-      - name: Update Latest Release
-        if: startsWith(needs.prepare.outputs.tag_name, 'v')
-        uses: softprops/action-gh-release@v1
-        with:
-          name: "foundry-zksync@latest"
-          tag_name: "latest"
           prerelease: false
           body: ${{ needs.prepare.outputs.changelog }}
           files: |
