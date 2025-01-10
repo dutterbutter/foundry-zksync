@@ -33,6 +33,14 @@ jobs:
           Copy-Item ./install-foundry-zksync -Destination C:/Temp/ -Force
           cd C:/Temp/
           ./install-foundry-zksync
+      
+      - name: Debug Temp Directory
+        shell: pwsh
+        run: Get-ChildItem C:/Temp/ -Recurse
+
+      - name: Add forge to PATH
+        shell: pwsh
+        run: $env:PATH += ";C:/Temp/"; Write-Output $env:PATH
 
       - name: Verify installation
         shell: pwsh
