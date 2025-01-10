@@ -139,9 +139,14 @@ main() {
 
     # Download and extract the binaries archive
     say "downloading latest forge, and cast"
+    echo "platform: $PLATFORM"
     if [ "$PLATFORM" = "win32" ]; then
       tmp="$(mktemp -d 2>/dev/null || echo ".")/foundry-zksync.zip"
       ensure download "$BIN_ARCHIVE_URL" "$tmp"
+      if [ ! -s "$tmp" ]; then
+        err "Downloaded zip file is empty or corrupted."
+      fi
+      ls -lh "$(dirname "$tmp")"
       ensure unzip "$tmp" -d "$FOUNDRY_BIN_DIR"
       rm -f "$tmp"
     else
