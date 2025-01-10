@@ -28,7 +28,9 @@ jobs:
       - name: Install foundry-zksync
         shell: pwsh
         run: |
-          Copy-Item ./install-foundry-zksync ./foundryup-zksync/* -Destination C:/Temp/ -Force
+          New-Item -ItemType Directory -Force -Path C:/Temp/
+          Get-ChildItem ./foundryup-zksync/ | ForEach-Object { Copy-Item $_.FullName -Destination C:/Temp/ -Force }
+          Copy-Item ./install-foundry-zksync -Destination C:/Temp/ -Force
           cd C:/Temp/
           ./install-foundry-zksync
 
@@ -41,15 +43,18 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Install foundry-zksync
         shell: pwsh
         run: |
-          Copy-Item ./install-foundry-zksync ./foundryup-zksync/* -Destination C:/Temp/ -Force
+          New-Item -ItemType Directory -Force -Path C:/Temp/
+          Get-ChildItem ./foundryup-zksync/ | ForEach-Object { Copy-Item $_.FullName -Destination C:/Temp/ -Force }
+          Copy-Item ./install-foundry-zksync -Destination C:/Temp/ -Force
           cd C:/Temp/
           ./install-foundry-zksync
-      
+
       - name: Verify anvil-zksync installation
         shell: pwsh
         run: anvil-zksync --version
+
 
