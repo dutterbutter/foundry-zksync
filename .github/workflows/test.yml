@@ -24,9 +24,16 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Install foundry-zksync
-        run: cp ./install-foundry-zksync ./foundryup-zksync/* /tmp/ && cd /tmp && ./install-foundry-zksync
+        shell: pwsh
+        run: |
+          Copy-Item ./install-foundry-zksync ./foundryup-zksync/* -Destination C:/Temp/ -Force
+          cd C:/Temp/
+          ./install-foundry-zksync
+
       - name: Verify installation
+        shell: pwsh
         run: forge --version
 
   check-ci-install-anvil:
@@ -36,10 +43,13 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Install foundry-zksync
+        shell: pwsh
         run: |
-          cp ./install-foundry-zksync ./foundryup-zksync/* /tmp/
-          cd /tmp
+          Copy-Item ./install-foundry-zksync ./foundryup-zksync/* -Destination C:/Temp/ -Force
+          cd C:/Temp/
           ./install-foundry-zksync
       
       - name: Verify anvil-zksync installation
+        shell: pwsh
         run: anvil-zksync --version
+
